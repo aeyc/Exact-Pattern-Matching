@@ -123,10 +123,11 @@ def BoyerMoore(t,p):
     shift = 0
     comparison = 1
     time = 0
-    start = timer()
-    fullstart = start
     flag = False
     position = 0
+    start = timer()
+    fullstart = start
+
     while j < len(t) and flag == False:    
         if (p[i] != t[j]):
             #compare shift of badchar and gsf
@@ -145,18 +146,13 @@ def BoyerMoore(t,p):
                 j = g +elderJ #shift
                 elderJ = j
                 shift = shift + b
-#            elif (p[i] not in t):
-#                i = len(p) -1
-#                j = elderJ+1
-#                elderJ = j
-#                shift = shift + 1
+
         elif(p[i] == t[j]) and i != 0:
             i -=1
             j -=1
         elif(p[i] == t[j]) and i == 0:
             position = j +1, ",", j+len(p)+1
             end = timer()
-            comparison +=1 ##NOT SURE
             print("Total time : %.1f ms" % (1000 * (end - fullstart)))
             print("Given Pattern found in the text in position: ", position) 
             print("Number of comparisons: ", comparison)
@@ -223,7 +219,6 @@ def GoodSuffix2(p, i):
         
     prefix = p[0:i+1]
     flag = False
-    print(suffixes)
     for m in suffixes:
         if prefix.find(m) == -1 and flag == False:
             shift = 1
@@ -276,6 +271,23 @@ def RabinKarp(t,p):
                 print("Number of comparisons: ", comparison)
                 time = (1000 * (end - fullstart))
                 return shift,position,comparison, time
+            
+###            
+#            For the worst case scenerio of Rabin Karp Algorithm
+#            which is, fingerprints of pattern and pattern long text part is equal 
+#            However, pattern is not EXACTLY matched with text portion.
+###            
+            else:      
+                k = 0
+                l = pos
+                while k < m:
+                    if (p[k] != t[l]):
+                        comparison = comparison +1
+                        break
+                    else:
+                        comparison = comparison +1
+                        l = l+1
+                        k = k+1
         ft = ((ft-ord(t[pos])*c)*4 + ord(t[pos+m]))%q
         shift = shift+1
     if (flag == False):
@@ -330,4 +342,4 @@ def main():
             print("Please type a valid choice.")
     print("GoodBye!")
     
-main()
+#main()
