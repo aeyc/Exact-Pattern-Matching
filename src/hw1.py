@@ -6,7 +6,7 @@ Created on Sat Oct 12 14:29:19 2019
 @author: Ayca Begum Tascioglu
 21600907
 """
-
+#%%
 """
 Brute-Force Algorithm
 """
@@ -18,31 +18,37 @@ def BruteForce(t,p):
     n = len(t)
     m = len(p)
     i = 0
+    j =0
     comparison = 0
     start = timer()
     fullstart = start
 
-    while i < n:
-        comparison = comparison +1
-        if p == t[i : i+m]:
-            comparison = comparison + m
-            position = i, ",",i+m
-            print("Given Pattern found in the text in position: ", i, ",", i+m) 
-            print("Number of comparisons: ", comparison)
-            end = timer()
-            print("Total time : %.1f ms" % (1000 * (end - fullstart)))
-            time = (1000 * (end - fullstart))
-            return shift,position,comparison, time
+    while j < n:
+        if p[i] == t[j]:
+            if i == m-1:
+                position =j-m +2, ",", j + 2
+                print("Given Pattern found in the text in position: ", j-m+2, ",", j+2) 
+                print("Number of comparisons: ", comparison)
+                end = timer()
+                print("Total time : %.1f ms" % (1000 * (end - fullstart)))
+                time = (1000 * (end - fullstart))
+                return shift,position,comparison, time
+            else:
+                i = i + 1
+                j = j + 1
         else:
-            i = i + 1
-            shift +=1
+            i = 0
+            shift = shift + 1
+            j = shift
+        comparison = comparison +1
+            
     print("Given pattern is not in text")
     print("Number of comparisons: ", comparison)
     end = timer()
     print("Total time : %.1f ms" % (1000 * (end - fullstart)))
     return -1 
 
-
+#%%
 """
 KMP Algorithm
 """
@@ -62,7 +68,7 @@ def KMP_FailureFunction(p):
             failure.insert(i, 0)
             i = i+1
     return failure
-def KnuttMorrisPratt(t,p):
+def KnuthMorrisPratt(t,p):
     m = len(p)
     n = len(t)
     i = 0
@@ -76,35 +82,38 @@ def KnuttMorrisPratt(t,p):
     failure = KMP_FailureFunction(p)
     while i < n:
         if t[i] == p[j]:
-            comparison = comparison +1
             if j == m-1:
-                #comparison = comparison + 1
-                print("Given Pattern found in the text in position: ", i-j, ",", i - j + m) 
-                print("Number of comparisons: ", comparison)
+                comparison = comparison + j -1
                 end = timer()
+                print("Given Pattern found in the text in position: ", i-j+1, ",", i - j + m+1) 
+                print("Number of comparisons: ", comparison)
                 print("Total time : %.1f ms" % (1000 * (end - fullstart)))
                 time = (1000 * (end - fullstart))
-                position = i-j , ",", i - j + m
+                position = i-j + 1 , ",", i - j + m +1
                 return shift,position,comparison, time
             else:
                 i = i+1
                 j = j+1
+            
         else:
-            comparison = comparison + 1
             if j > 0:
+                shift = shift + (j - failure[j-1])
                 j = failure[j-1]
+                comparison = comparison + j -1
             else:
                 i = i+1
                 j =0
-            shift +=1 
+                shift = shift + 1 
+                comparison = comparison + 1
+        comparison = comparison + 1 
     print("Given pattern is not in text")
     print("Number of comparisons: ", comparison)
     return -1
-    
-#KnuttMorrisPratt("aycabegumtascioglu","cevad")
-#"""
-#Boyer-Moore Algorithm
-#"""
+#%%    
+
+"""
+Boyer-Moore Algorithm
+"""
 def BoyerMoore(t,p):
     i = len(p)-1
     j = len(p)-1
@@ -145,7 +154,7 @@ def BoyerMoore(t,p):
             i -=1
             j -=1
         elif(p[i] == t[j]) and i == 0:
-            position = j, ",", j+len(p) -1
+            position = j +1, ",", j+len(p)+1
             end = timer()
             comparison +=1 ##NOT SURE
             print("Total time : %.1f ms" % (1000 * (end - fullstart)))
@@ -162,7 +171,7 @@ def BoyerMoore(t,p):
         print("Number of comparisons: ", comparison)
         time = (1000 * (end - fullstart))
     return shift,position,comparison, time       
-
+#%%
 def BadChar(p,char,i):
     shift =0
     i = i-1 #no need to compare bad char
@@ -174,6 +183,7 @@ def BadChar(p,char,i):
         i -=1   
     return shift
 
+#%%
 """
 Good Suffix Rule 1 
 takes p as pattern
@@ -225,7 +235,7 @@ def GoodSuffix2(p, i):
     return shift
     
     
-     
+#%%   
 """
 Rabin-Karp Algorithm
 hashes pattern and analysing part of the text
@@ -243,6 +253,7 @@ def RabinKarp(t,p):
     fp = 0
     ft = 0
     i = 0
+    pos = 0
     position = 0
     comparison = 0
     shift = 0
@@ -253,18 +264,19 @@ def RabinKarp(t,p):
     for i in range(m):
         fp = (4*fp + ord(p[i]))%q
         ft = (4*ft + ord(t[i]))%q
-    for position in range(n-m):
+    for pos in range(n-m):
         if (fp == ft): #check if the hashed functions are equal
-            if  p[0:m-1]== t[position:position+m-1]: #check deeper, if the pattern exactly matches
+            if  p[0:m-1]== t[pos:pos+m-1]: #check deeper, if the pattern exactly matches
                 comparison = len(p[0:m-1])
                 flag = True
                 end = timer()
                 print("Total time : %.1f ms" % (1000 * (end - fullstart)))
+                position = pos +1,",",pos+m +1
                 print("Given Pattern found in the text in position: ", position) 
                 print("Number of comparisons: ", comparison)
                 time = (1000 * (end - fullstart))
                 return shift,position,comparison, time
-        ft = ((ft-ord(t[position])*c)*4 + ord(t[position+m]))%q
+        ft = ((ft-ord(t[pos])*c)*4 + ord(t[pos+m]))%q
         shift = shift+1
     if (flag == False):
         end = timer()
@@ -274,7 +286,7 @@ def RabinKarp(t,p):
     return -1
 
 
-
+#%%
 """
 MAIN PROGRAM
 takes textFile from user yet, 
@@ -302,13 +314,14 @@ def main():
     pattern = pattern.replace("\n","")
     ext = 1
     print("Welcome to exact string matching comperator bot!")
+    print("If the pattern is in text, locations will be printed in 1-based coordinate")
     while ext != 0:
-        print("\n For Brute Force type 1\n For KnuttMorrisPratt type 2\n For BoyerMoore type 3\n For RabinKarp type 4\n For exit type 0.")
+        print("\n For Brute Force type 1\n For KnuthMorrisPratt type 2\n For BoyerMoore type 3\n For RabinKarp type 4\n For exit type 0.")
         ext = int(input())
         if (ext == 1):
             BruteForce(text,pattern)
         elif (ext ==2):
-            KnuttMorrisPratt(text,pattern)
+            KnuthMorrisPratt(text,pattern)
         elif (ext ==3):
             BoyerMoore(text,pattern)
         elif (ext == 4):
