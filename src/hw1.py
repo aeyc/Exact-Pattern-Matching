@@ -30,8 +30,9 @@ def BruteForce(t,p):
                 print("Given Pattern found in the text in position: ", j-m+2, ",", j+2) 
                 print("Number of comparisons: ", comparison)
                 end = timer()
-                print("Total time : %.1f ms" % (1000 * (end - fullstart)))
+                #print("Total time : %.1f ms" % (1000 * (end - fullstart)))
                 time = (1000 * (end - fullstart))
+                print("Time :",time)
                 return shift,position,comparison, time
             else:
                 i = i + 1
@@ -45,7 +46,8 @@ def BruteForce(t,p):
     print("Given pattern is not in text")
     print("Number of comparisons: ", comparison)
     end = timer()
-    print("Total time : %.1f ms" % (1000 * (end - fullstart)))
+    time = (1000 * (end - fullstart))
+    print("Time :" ,time)
     return -1 
 
 #%%
@@ -87,8 +89,9 @@ def KnuthMorrisPratt(t,p):
                 end = timer()
                 print("Given Pattern found in the text in position: ", i-j+1, ",", i - j + m+1) 
                 print("Number of comparisons: ", comparison)
-                print("Total time : %.1f ms" % (1000 * (end - fullstart)))
+                #print("Total time : %.1f ms" % (1000 * (end - fullstart)))
                 time = (1000 * (end - fullstart))
+                print("Time :",time)
                 position = i-j + 1 , ",", i - j + m +1
                 return shift,position,comparison, time
             else:
@@ -106,8 +109,11 @@ def KnuthMorrisPratt(t,p):
                 shift = shift + 1 
                 comparison = comparison + 1
         comparison = comparison + 1 
+    end = timer()
     print("Given pattern is not in text")
     print("Number of comparisons: ", comparison)
+    time = (1000 * (end - fullstart))
+    print("Time :" ,time)
     return -1
 #%%    
 
@@ -153,16 +159,18 @@ def BoyerMoore(t,p):
         elif(p[i] == t[j]) and i == 0:
             position = j +1, ",", j+len(p)+1
             end = timer()
-            print("Total time : %.1f ms" % (1000 * (end - fullstart)))
+            #print("Total time : %.1f ms" % (1000 * (end - fullstart)))
+            time = (1000 * (end - fullstart))
+            print("Time :",time)
             print("Given Pattern found in the text in position: ", position) 
             print("Number of comparisons: ", comparison)
-            time = (1000 * (end - fullstart))
             flag = True
             break
         comparison +=1
     if(flag == False):
         end = timer()
-        print("\nTotal time : %.1f ms" % (1000 * (end - fullstart)))
+        time = (1000 * (end - fullstart))
+        print("Time :" ,time)
         print("Given Pattern is NOT found in the text ")
         print("Number of comparisons: ", comparison)
         time = (1000 * (end - fullstart))
@@ -265,11 +273,13 @@ def RabinKarp(t,p):
                 comparison = len(p[0:m-1])
                 flag = True
                 end = timer()
-                print("Total time : %.1f ms" % (1000 * (end - fullstart)))
+                #print("Total time : %.1f ms" % (1000 * (end - fullstart)))
+                time = (1000 * (end - fullstart))
+                print("Time :" ,time)
                 position = pos +1,",",pos+m +1
                 print("Given Pattern found in the text in position: ", position) 
                 print("Number of comparisons: ", comparison)
-                time = (1000 * (end - fullstart))
+                
                 return shift,position,comparison, time
             
 ###            
@@ -292,7 +302,8 @@ def RabinKarp(t,p):
         shift = shift+1
     if (flag == False):
         end = timer()
-        print("Total time : %.1f ms" % (1000 * (end - fullstart)))
+        time = (1000 * (end - fullstart))
+        print("Time :" ,time)
         print("Given Pattern is NOT found in the text") 
         print("Number of comparisons: ", comparison)
     return -1
@@ -342,4 +353,4 @@ def main():
             print("Please type a valid choice.")
     print("GoodBye!")
     
-#main()
+main()
