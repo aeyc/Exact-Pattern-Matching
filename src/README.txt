@@ -1,5 +1,4 @@
-Ayca Begum Tascioglu - 21600907
-CS481-HW1
+Ayca Begum Tascioglu
 
 
 NOTE: text.fa, pattern.fa and notInText.fa are sample inputs that I used, which is provided under the assignment. User can modify them or delete and add new inputs.
